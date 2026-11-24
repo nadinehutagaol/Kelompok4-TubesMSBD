@@ -1,0 +1,14 @@
+-- Import order respects all original foreign-key dependencies.
+\copy "categories" ("id", "name") FROM '/postgresql/data/categories.csv' WITH (FORMAT csv, NULL '\N');
+\copy "users" ("id", "username", "full_name", "email", "email_verified_at", "password", "avatar_url", "bio", "location", "role", "remember_token", "created_at", "updated_at") FROM '/postgresql/data/users.csv' WITH (FORMAT csv, NULL '\N');
+\copy "shots" ("id", "user_id", "title", "description", "image_url", "created_at", "updated_at") FROM '/postgresql/data/shots.csv' WITH (FORMAT csv, NULL '\N');
+\copy "collections" ("id", "user_id", "name", "description", "created_at", "updated_at") FROM '/postgresql/data/collections.csv' WITH (FORMAT csv, NULL '\N');
+\copy "jobs" ("id", "poster_id", "title", "company_name", "location", "job_type", "description", "description_html", "apply_url", "created_at", "updated_at", "company_logo", "website") FROM '/postgresql/data/jobs.csv' WITH (FORMAT csv, NULL '\N');
+\copy "comments" ("id", "shot_id", "user_id", "body", "created_at", "updated_at") FROM '/postgresql/data/comments.csv' WITH (FORMAT csv, NULL '\N');
+\copy "follows" ("follower_id", "following_id", "created_at") FROM '/postgresql/data/follows.csv' WITH (FORMAT csv, NULL '\N');
+\copy "likes" ("shot_id", "user_id", "created_at") FROM '/postgresql/data/likes.csv' WITH (FORMAT csv, NULL '\N');
+\copy "shot_categories" ("shot_id", "category_id") FROM '/postgresql/data/shot_categories.csv' WITH (FORMAT csv, NULL '\N');
+\copy "collection_items" ("collection_id", "shot_id", "added_at") FROM '/postgresql/data/collection_items.csv' WITH (FORMAT csv, NULL '\N');
+\copy "project_inquiries" ("id", "user_id", "shots_id", "project_details", "target_date", "project_budget", "recommend_budget", "contact_person", "created_at", "updated_at") FROM '/postgresql/data/project_inquiries.csv' WITH (FORMAT csv, NULL '\N');
+\copy "migrations" ("id", "migration", "batch") FROM '/postgresql/data/migrations.csv' WITH (FORMAT csv, NULL '\N');
+\copy "sessions" ("id", "user_id", "ip_address", "user_agent", "payload", "last_activity") FROM '/postgresql/data/sessions.csv' WITH (FORMAT csv, NULL '\N');

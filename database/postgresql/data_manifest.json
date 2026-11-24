@@ -1,0 +1,30 @@
+{
+  "source": "trrrible.sql",
+  "source_db": "trrrible",
+  "source_engine": "MySQL 8.4.3",
+  "imported_rows": 100055,
+  "tables": {
+    "categories": 9,
+    "collections": 2,
+    "collection_items": 4,
+    "comments": 22950,
+    "follows": 1909,
+    "jobs": 51,
+    "likes": 70418,
+    "migrations": 12,
+    "project_inquiries": 2,
+    "sessions": 7,
+    "shots": 2295,
+    "shot_categories": 2293,
+    "users": 103
+  },
+  "empty_tables": [
+    "cache",
+    "cache_locks"
+  ],
+  "notes": [
+    "Original primary IDs are preserved.",
+    "Original foreign-key relationships were checked; no orphan rows were found.",
+    "view_top_designers is recreated as a PostgreSQL view, not imported as a table."
+  ]
+}

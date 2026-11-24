@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<head> 
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <title>{{ config('app.name', 'Laravel') }}</title>
+
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <style>
+        :root {
+            --dribbble-pink: #9060d4;
+            --dribbble-pink-hover: #7545b9;
+            --dribbble-dark: #261a3b;
+            --dribbble-bg: #faf7ff;
+        }
+
+        html {
+            color-scheme: light !important;
+        }
+
+        body {
+            background-color: var(--dribbble-bg);
+            color: var(--dribbble-dark);
+        }
+
+        .bg-dribbble-pink {
+            background-color: #9060d4 !important;
+        }
+
+        .hover\:bg-dribbble-pink:hover {
+            background-color: #7545b9 !important;
+        }
+
+        .text-dribbble-pink {
+            color: #9060d4 !important;
+        }
+
+        .border-dribbble-pink {
+            border-color: #9060d4 !important;
+        }
+
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+
+<body class="font-sans antialiased bg-[#faf7ff] text-[#261a3b]">
+
+    <div class="min-h-screen bg-[#faf7ff]">
+
+        @include('layouts.navigation')
+
+        @if(session('success'))
+            <div class="bg-green-50 border-l-4 border-green-500 text-green-800 p-4 mb-4 max-w-7xl mx-auto mt-4">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        @if(session('error'))
+            <div class="bg-red-50 border-l-4 border-red-500 text-red-800 p-4 mb-4 max-w-7xl mx-auto mt-4">
+                {{ session('error') }}
+            </div>
+        @endif
+
+        @isset($header)
+            <header class="bg-white shadow">
+                <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                    {{ $header }}
+                </div>
+            </header>
+        @endisset
+
+        <main>
+            @isset($slot)
+                {{ $slot }}
+            @else
+                @yield('content')
+            @endisset
+        </main>
+
+    </div>
+
+        <x-footer />
+
+    <script>
+    async function likeShotModal(shotId, button) {
+        try {
+        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
+
+        const response = await fetch(`/shots/${shotId}/like`, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': csrfToken,
+                'Accept': 'application/json'
+            }
+        });
+
+        if (response.status === 401 || response.redirected) {
+            window.location.href = '/login';
+            return;
+        }
+
+        const data = await response.json();
+
+        const svg = button.querySelector('.modal-like-svg');
+        const modalBottomIcon = document.querySelector(`#modal-bottom-like-icon-${shotId}`);
+
+        if (data.liked) {
+            button.classList.remove('text-gray-600');
+            button.classList.add('text-[#9060d4]');
+
+            if (svg) {
+                svg.setAttribute('fill', 'currentColor');
+                svg.classList.remove('text-gray-600');
+                svg.classList.add('text-[#9060d4]');
+            }
+
+            if (modalBottomIcon) {
+                modalBottomIcon.setAttribute('fill', 'currentColor');
+                modalBottomIcon.classList.remove('text-gray-500');
+                modalBottomIcon.classList.add('text-[#9060d4]');
+            }
+        } else {
+            button.classList.remove('text-[#9060d4]');
+            button.classList.add('text-gray-600');
+
+            if (svg) {
+                svg.setAttribute('fill', 'none');
+                svg.classList.remove('text-[#9060d4]');
+                svg.classList.add('text-gray-600');
+            }
+
+            if (modalBottomIcon) {
+                modalBottomIcon.setAttribute('fill', 'none');
+                modalBottomIcon.classList.remove('text-[#9060d4]');
+                modalBottomIcon.classList.add('text-gray-500');
+            }
+        }
+
+        document
+            .querySelectorAll(`.like-count[data-shot-id="${shotId}"]`)
+            .forEach((el) => {
+                el.textContent = data.likes_count;
+            });
+
+    } catch (error) {
+        console.error('Like modal error:', error);
+    }
+}
+    </script>
+
+<script>
+    window.openGetInTouchModal = function (shotId) {
+        const modal = document.getElementById('get-in-touch-modal-' + shotId);
+
+        if (modal) {
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        } else {
+            console.error('Get in touch modal not found:', shotId);
+        }
+    };
+
+    window.closeGetInTouchModal = function (shotId) {
+        const modal = document.getElementById('get-in-touch-modal-' + shotId);
+
+        if (modal) {
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+    };
+
+    window.sendGetInTouchMessage = function (event, shotId, form) {
+    event.preventDefault(); 
+
+    if (!form) {
+        alert('Form tidak ditemukan!');
+        return;
+    }
+
+    const url = form.getAttribute('action');
+    const formData = new FormData(form);
+
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'X-CSRF-TOKEN': form.querySelector('input[name="_token"]').value
+        },
+        body: formData
+    })
+    .then(async response => {
+        const data = await response.json();
+        
+        if (response.ok && data.success) {
+            alert(data.message); 
+            form.reset(); 
+            window.closeGetInTouchModal(shotId);
+        } else {
+            if (data.errors) {
+                const errorMessages = Object.values(data.errors).flat().join('\n');
+                alert('Validasi Gagal:\n' + errorMessages);
+            } else {
+                alert('Gagal: ' + (data.message || 'Terjadi kesalahan sistem.'));
+            }
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Koneksi gagal atau terjadi masalah di server (Controller).');
+    });
+};
+</script>
+
+<script>
+function prepareReply(username, shotId) {
+    setTimeout(() => {
+        const form = document.querySelector(`form[onsubmit*="${shotId}"]`);
+        
+        if (form) {
+            // 3. Cari textarea di dalam form spesifik tersebut
+            const textarea = form.querySelector('textarea[name="body"]');
+            if (textarea) {
+                textarea.value = `@${username} ` + textarea.value;
+                textarea.focus();
+                return; 
+            }
+        }
+ 
+        const globalTextarea = document.querySelector('textarea[name="body"]');
+        if (globalTextarea) {
+            globalTextarea.value = `@${username} ` + globalTextarea.value;
+            globalTextarea.focus();
+        } else {
+            console.error('Kolom komentar "textarea[name=\'body\']" tidak ditemukan di halaman ini.');
+        }
+    }, 100);
+}
+</script>
+
+</body>
+</html>

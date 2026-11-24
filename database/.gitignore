@@ -1,0 +1,3 @@
+*.sqlite*
+# Database backup
+*.dump

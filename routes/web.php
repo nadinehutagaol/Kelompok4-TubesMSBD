@@ -14,6 +14,7 @@ use App\Http\Middleware\IsAdmin;
 use App\Http\Controllers\PostController;
 use App\Models\Job;
 use App\Http\Controllers\ProjectInquiryController;
+use App\Http\Controllers\AdminModerationController;
 use App\Http\Controllers\MarketplaceController;
 
 Route::get('/', [ShotController::class, 'home'])->name('home');
@@ -230,6 +231,22 @@ Route::middleware([IsAdmin::class])->group(function () {
     Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::resource('admin/users', AdminUserController::class)->names('admin.users');
     Route::get('/admin/reports', [ReportController::class, 'index'])->name('admin.reports.index');
+
+    // Moderasi Shots
+    Route::get('/admin/shots', [AdminModerationController::class, 'shots'])->name('admin.shots.index');
+    Route::get('/admin/shots/{shot}', [AdminModerationController::class, 'showShot'])->name('admin.shots.show');
+    Route::delete('/admin/shots/{shot}', [AdminModerationController::class, 'destroyShot'])->name('admin.shots.destroy');
+
+    // Moderasi Komentar
+    Route::delete('/admin/comments/{comment}', [AdminModerationController::class, 'destroyComment'])->name('admin.comments.destroy');
+
+    // Moderasi Marketplace
+    Route::get('/admin/products', [AdminModerationController::class, 'products'])->name('admin.products.index');
+    Route::patch('/admin/products/{product}/deactivate', [AdminModerationController::class, 'deactivateProduct'])->name('admin.products.deactivate');
+
+    // Moderasi Jobs
+    Route::get('/admin/jobs', [AdminModerationController::class, 'jobs'])->name('admin.jobs.index');
+    Route::delete('/admin/jobs/{job}', [AdminModerationController::class, 'destroyJob'])->name('admin.jobs.destroy');
 });
 
 Route::get('/jobs/{id}', function ($id) {

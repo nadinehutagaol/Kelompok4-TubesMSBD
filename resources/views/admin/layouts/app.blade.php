@@ -9,9 +9,9 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Admin Dribbble - Dashboard</title>
+    <title>Admin Trrrible - Dashboard</title>
 
-    <link href="{{ asset('admin_assets/vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" type="text/css">
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
@@ -21,13 +21,13 @@
     @vite('resources/css/app.css')
 
     <style>
-        /* 1. Sidebar jadi Dark Mode ala Dribbble */
+        /* 1. Sidebar jadi Dark Mode ala Trrrible */
         .bg-gradient-primary {
             background: #9060d4 !important;
             background-image: none !important;
         }
 
-        /* 2. Warna teks primary (biru kaku) diganti jadi Pink Dribbble */
+        /* 2. Warna teks primary (biru kaku) diganti jadi Pink Trrrible */
         .text-primary {
             color: #9060d4 !important;
         }
@@ -100,13 +100,13 @@
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-palette"></i>
                 </div>
-                <div class="sidebar-brand-text mx-3">Dribbble's Admin</div>
+                <div class="sidebar-brand-text mx-3">Trrrible's Admin</div>
             </a>
 
             <hr class="sidebar-divider my-0">
 
-            <li class="nav-item active">
-                <a class="nav-link" href="{{ route('admin.dashboard') }}">
+            <li class="nav-item {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
+    <a class="nav-link" href="{{ route('admin.dashboard') }}">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
             </li>
@@ -123,6 +123,29 @@
                     <span>Pengguna (Users)</span>
                 </a>
             </li>
+            <li class="nav-item {{ request()->routeIs('admin.shots.*') ? 'active' : '' }}">
+    <a class="nav-link" href="{{ route('admin.shots.index') }}">
+        <i class="fas fa-fw fa-image"></i>
+        <span>Manajemen Shots</span>
+    </a>
+</li>
+
+<!-- MARKETPLACE -->
+<li class="nav-item {{ request()->routeIs('admin.products.*') ? 'active' : '' }}">
+    <a class="nav-link" href="{{ route('admin.products.index') }}">
+        <i class="fas fa-fw fa-shopping-bag"></i>
+        <span>Manajemen Marketplace</span>
+    </a>
+</li>
+
+<!-- JOBS -->
+<li class="nav-item {{ request()->routeIs('admin.jobs.*') ? 'active' : '' }}">
+    <a class="nav-link" href="{{ route('admin.jobs.index') }}">
+        <i class="fas fa-fw fa-briefcase"></i>
+        <span>Manajemen Jobs</span>
+    </a>
+</li>
+
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('admin.reports.index') }}">
                     <i class="fas fa-fw fa-chart-bar"></i>
@@ -176,7 +199,7 @@
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; Dribbble Clone 2026</span>
+                        <span>Copyright &copy; Trrrible 2026</span>
                     </div>
                 </div>
             </footer>
@@ -199,18 +222,24 @@
                 <div class="modal-body">Pilih "Logout" di bawah jika kamu ingin mengakhiri sesi.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Batal</button>
-                    <a class="btn btn-primary" href="{{ route('logout') }}">Logout</a>
+                    <form action="{{ url('/logout') }}" method="POST">
+    @csrf
+    <button type="submit" class="btn btn-primary">
+        Logout
+    </button>
+</form>
                 </div>
             </div>
         </div>
     </div>
 
-    <script src="{{ asset('admin_assets/vendor/jquery/jquery.min.js') }}"></script>
-    <script src="{{ asset('admin_assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 
-    <script src="{{ asset('admin_assets/vendor/jquery-easing/jquery.easing.min.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.2/js/bootstrap.bundle.min.js"></script>
 
-    <script src="{{ asset('admin_assets/js/sb-admin-2.min.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+
+<script src="{{ asset('admin_assets/js/sb-admin-2.min.js') }}"></script>
 
 </body>
 

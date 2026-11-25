@@ -107,7 +107,8 @@
         <div class="bg-white rounded-[26px] p-3 transition duration-300 hover:-translate-y-1 hover:shadow-xl">
 
             <!-- IMAGE -->
-            <div class="overflow-hidden rounded-[22px] bg-gray-100 relative">
+<a href="{{ route('admin.shots.show', $shot->id) }}"
+   class="block overflow-hidden rounded-[22px] bg-gray-100 relative">
 
                 <img
                     src="{{ \Illuminate\Support\Str::startsWith($shot->image_url, 'http') ? $shot->image_url : asset('storage/' . $shot->image_url) }}"
@@ -118,9 +119,9 @@
 
                 <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors rounded-[22px]"></div>
 
-            </div>
+</a>
 
-            <!-- USER + LIKE -->
+<!-- USER + LIKE -->
             <div class="flex items-center justify-between mt-4 px-1">
 
                 <!-- USER -->

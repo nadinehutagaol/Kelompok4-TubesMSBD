@@ -1,0 +1,24 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: trrrible
+      POSTGRES_USER: ${POSTGRES_SUPERUSER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_SUPERUSER_PASSWORD:?Set POSTGRES_SUPERUSER_PASSWORD in .env}
+      APP_DB_PASSWORD: ${APP_DB_PASSWORD:?Set APP_DB_PASSWORD in .env}
+
+    ports:
+      - "${DB_FORWARD_PORT:-5437}:5432"
+    volumes:
+      - trrrible_pgdata:/var/lib/postgresql/data
+      - ./database/postgresql:/postgresql:ro
+      - ./database/postgresql/init/01-bootstrap.sh:/docker-entrypoint-initdb.d/01-bootstrap.sh:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_SUPERUSER:-postgres} -d trrrible"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+volumes:
+  trrrible_pgdata:
